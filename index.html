@@ -493,6 +493,7 @@
         <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
          <button class="btn-primary" onclick="window._genTitle=document.getElementById('gen-story-title').textContent; window._genBody=document.getElementById('gen-story-body').innerText; saveGenerated()">💾 Sauvegarder</button>
           <button class="btn-outline" onclick="generateStory()">↺ Régénérer</button>
+         <button class="btn-outline" onclick="openImmersive()">🌙 Lecture Immersive</button>
         </div>
       </div>
     </div>
@@ -922,7 +923,13 @@ Règles absolues :
 
   btn.disabled = false;
 }
-
+function openImmersive() {
+  const title = window._genTitle || document.getElementById('gen-story-title')?.textContent || '';
+  const body = window._genBody || document.getElementById('gen-story-body')?.innerText || '';
+  if (!title || title === 'Oups…') { showToast('Générez d\'abord une histoire !'); return; }
+  const url = '/lecteur-immersif?titre=' + encodeURIComponent(title) + '&contenu=' + encodeURIComponent(body);
+  window.open(url, '_blank');
+}
 async function saveGenerated() {
   const title = window._genTitle || document.getElementById('gen-story-title')?.textContent;
   const body = window._genBody || document.getElementById('gen-story-body')?.innerText;
