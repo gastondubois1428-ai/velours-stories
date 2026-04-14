@@ -1015,6 +1015,13 @@ function init() {
   renderBrowse();
   updateCounter();
 }
+ // Détecter retour Stripe
+if (window.location.search.includes('premium=success')) {
+  isPremium = true;
+  localStorage.setItem('velours_premium', '1');
+  history.replaceState({}, '', '/');
+  setTimeout(() => showToast('✦ Bienvenue dans Velours Premium !'), 500);
+}
 init();
 </script>
 </body>
