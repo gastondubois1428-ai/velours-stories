@@ -491,7 +491,7 @@
         <h2 class="gen-result-title" id="gen-story-title"></h2>
         <div class="gen-result-body" id="gen-story-body"></div>
         <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
-          <button class="btn-primary" onclick="saveGenerated()">💾 Sauvegarder</button>
+          <button class="btn-primary" onclick="saveGenerated(this)">💾 Sauvegarder</button>
           <button class="btn-outline" onclick="generateStory()">↺ Régénérer</button>
         </div>
       </div>
@@ -925,10 +925,10 @@ Règles absolues :
   btn.disabled = false;
 }
 
-async function saveGenerated() {
+async function saveGenerated(btn) {
+  if (!window._lastGenTitle) { window._lastGenTitle = document.getElementById("gen-story-title")?.textContent || ""; window._lastGenBody = document.getElementById("gen-story-body")?.innerText || ""; window._lastGenCategorie = "romantique"; }
   if (!window._lastGenTitle) { showToast('Rien à sauvegarder'); return; }
-  const btn = event.target;
-  btn.disabled = true; btn.textContent = '💾 Sauvegarde…';
+  if(btn){btn.disabled=true; btn.textContent = '💾 Sauvegarde…';
   try {
     const res = await fetch('/api/stories', {
       method: 'POST',
@@ -944,7 +944,7 @@ async function saveGenerated() {
     if (data.error) { showToast('❌ Erreur : ' + data.error); }
     else { showToast('✦ Histoire sauvegardée dans la bibliothèque !'); }
   } catch(e) { showToast('Erreur de sauvegarde'); }
-  btn.disabled = false; btn.textContent = '💾 Sauvegarder';
+  if(btn){btn.disabled=false; btn.textContent='💾 Sauvegarder';}
 }
 
 // ── FAQ ────────────────────────────────────────────────────────
