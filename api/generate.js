@@ -1,9 +1,7 @@
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
+  if (req.method !== 'POST') return res.status(405).end()
 
-  const { prompt, system } = req.body;
+  const { prompt, system } = req.body
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -14,7 +12,7 @@ export default async function handler(req, res) {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-5',
+        model: 'claude-opus-4-5',
         max_tokens: 1500,
         system: system,
         messages: [{ role: 'user', content: prompt }]
@@ -22,8 +20,9 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
+    if (data.error) return res.status(500).json({ error: data.error.message });
     res.status(200).json(data);
   } catch (error) {
-    res.status(500).json({ error: 'Erreur de génération' });
+    res.status(500).json({ error: error.message });
   }
 }
