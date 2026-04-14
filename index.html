@@ -491,7 +491,7 @@
         <h2 class="gen-result-title" id="gen-story-title"></h2>
         <div class="gen-result-body" id="gen-story-body"></div>
         <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
-          <button class="btn-primary" onclick="saveGenerated()">💾 Sauvegarder</button>
+         <button class="btn-primary" onclick="window._genTitle=document.getElementById('gen-story-title').textContent; window._genBody=document.getElementById('gen-story-body').innerText; saveGenerated()">💾 Sauvegarder</button>
           <button class="btn-outline" onclick="generateStory()">↺ Régénérer</button>
         </div>
       </div>
