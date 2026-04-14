@@ -475,29 +475,34 @@ body {
 </div>
 
 <!-- PANNEAU MUSIQUE -->
-<div class="music-panel" id="music-panel">
-  <div class="music-panel-title">Musique d'ambiance</div>
-  <div class="music-track active" onclick="playTrack('piano', this)">
-    <span class="track-icon">🎹</span>
-    <span class="track-name">Piano nocturne</span>
-  </div>
-  <div class="music-track" onclick="playTrack('rain', this)">
-    <span class="track-icon">🌧️</span>
-    <span class="track-name">Pluie d'été</span>
-  </div>
-  <div class="music-track" onclick="playTrack('fireplace', this)">
-    <span class="track-icon">🔥</span>
-    <span class="track-name">Feu de cheminée</span>
-  </div>
-  <div class="music-track" onclick="playTrack('ocean', this)">
-    <span class="track-icon">🌊</span>
-    <span class="track-name">Vagues douces</span>
-  </div>
-  <div class="music-track" onclick="playTrack('none', this)">
-    <span class="track-icon">🔇</span>
-    <span class="track-name">Silence</span>
-  </div>
-</div>
+const TRACKS = {
+  piano: 'https://cdn.pixabay.com/audio/2022/10/31/audio_b2f8d0f2d5.mp3',
+  rain: 'https://cdn.pixabay.com/audio/2022/03/10/audio_8cfc5e8b41.mp3',
+  fireplace: 'https://cdn.pixabay.com/audio/2021/10/25/audio_5b89e5b2b5.mp3',
+  ocean: 'https://cdn.pixabay.com/audio/2022/03/15/audio_72a8d5fd4d.mp3'
+};
+
+let audioEl = null;
+
+function stopMusic() {
+  if (audioEl) { audioEl.pause(); audioEl = null; }
+  musicPlaying = false;
+  updateMusicBtn(false);
+}
+
+function playTrack(track, btn) {
+  document.querySelectorAll('.music-track').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  stopMusic();
+  document.getElementById('music-panel').classList.remove('open');
+  if (track === 'none') return;
+  audioEl = new Audio(TRACKS[track]);
+  audioEl.loop = true;
+  audioEl.volume = 0.3;
+  audioEl.play();
+  musicPlaying = true;
+  updateMusicBtn(true);
+}
 
 <!-- CONTENU -->
 <div class="reader-content">
