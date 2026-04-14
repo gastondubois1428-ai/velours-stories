@@ -491,7 +491,7 @@
         <h2 class="gen-result-title" id="gen-story-title"></h2>
         <div class="gen-result-body" id="gen-story-body"></div>
         <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
-          <button class="btn-primary" onclick="saveGenerated(this)">💾 Sauvegarder</button>
+          <button class="btn-primary" onclick="saveGenerated()">💾 Sauvegarder</button>
           <button class="btn-outline" onclick="generateStory()">↺ Régénérer</button>
         </div>
       </div>
@@ -881,7 +881,7 @@ Format :
 
 [texte en paragraphes séparés par des lignes vides]`;
 
-  try {
+try {
     const response = await fetch('/api/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -908,12 +908,10 @@ Règles absolues :
     const paras = body.split('\n\n').filter(p=>p.trim()).map(p=>`<p>${p.trim()}</p>`).join('');
     document.getElementById('gen-story-title').textContent = title;
     document.getElementById('gen-story-body').innerHTML = paras || `<p>${body}</p>`;
+    window._genTitle = title;
+    window._genBody = body;
     loading.style.display = 'none';
     output.style.display = 'block';
-    // Stocker pour sauvegarde
-    window._lastGenTitle = title;
-    window._lastGenBody = body;
-    window._lastGenCategorie = ambiances[0] || 'romantique';
 
   } catch(err) {
     loading.style.display = 'none';
@@ -925,26 +923,21 @@ Règles absolues :
   btn.disabled = false;
 }
 
-async function saveGenerated(btn) {
-  if (!window._lastGenTitle) { window._lastGenTitle = document.getElementById("gen-story-title")?.textContent || ""; window._lastGenBody = document.getElementById("gen-story-body")?.innerText || ""; window._lastGenCategorie = "romantique"; }
-  if (!window._lastGenTitle) { showToast('Rien à sauvegarder'); return; }
-  if (btn) { btn.disabled = true; btn.textContent = '💾 Sauvegarde…'; }
+async function saveGenerated() {
+  const title = window._genTitle || document.getElementById('gen-story-title')?.textContent;
+  const body = window._genBody || document.getElementById('gen-story-body')?.innerText;
+  if (!title || title === 'Oups…') { showToast('Générez d\'abord une histoire !'); return; }
+  showToast('💾 Sauvegarde en cours…');
   try {
     const res = await fetch('/api/stories', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        titre: window._lastGenTitle,
-        contenu: window._lastGenBody,
-        categorie: window._lastGenCategorie,
-        user_id: currentUser?.email || 'Anonyme'
-      })
+      body: JSON.stringify({ titre: title, contenu: body, categorie: 'romantique', user_id: currentUser?.email || 'Anonyme' })
     });
     const data = await res.json();
-    if (data.error) { showToast('❌ Erreur : ' + data.error); }
-    else { showToast('✦ Histoire sauvegardée dans la bibliothèque !'); }
+    if (data.error) showToast('❌ ' + data.error);
+    else showToast('✦ Histoire sauvegardée !');
   } catch(e) { showToast('Erreur de sauvegarde'); }
-  if (btn) { btn.disabled = false; btn.textContent = '💾 Sauvegarder'; }
 }
 
 // ── FAQ ────────────────────────────────────────────────────────
