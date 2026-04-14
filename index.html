@@ -928,7 +928,7 @@ Règles absolues :
 async function saveGenerated(btn) {
   if (!window._lastGenTitle) { window._lastGenTitle = document.getElementById("gen-story-title")?.textContent || ""; window._lastGenBody = document.getElementById("gen-story-body")?.innerText || ""; window._lastGenCategorie = "romantique"; }
   if (!window._lastGenTitle) { showToast('Rien à sauvegarder'); return; }
-  if(btn){btn.disabled=true; btn.textContent = '💾 Sauvegarde…';
+  if (btn) { btn.disabled = true; btn.textContent = '💾 Sauvegarde…'; }
   try {
     const res = await fetch('/api/stories', {
       method: 'POST',
@@ -944,7 +944,7 @@ async function saveGenerated(btn) {
     if (data.error) { showToast('❌ Erreur : ' + data.error); }
     else { showToast('✦ Histoire sauvegardée dans la bibliothèque !'); }
   } catch(e) { showToast('Erreur de sauvegarde'); }
-  if(btn){btn.disabled=false; btn.textContent='💾 Sauvegarder';}
+  if (btn) { btn.disabled = false; btn.textContent = '💾 Sauvegarder'; }
 }
 
 // ── FAQ ────────────────────────────────────────────────────────
