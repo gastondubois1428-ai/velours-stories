@@ -475,34 +475,29 @@ body {
 </div>
 
 <!-- PANNEAU MUSIQUE -->
-const TRACKS = {
-  piano: 'https://cdn.pixabay.com/audio/2022/10/31/audio_b2f8d0f2d5.mp3',
-  rain: 'https://cdn.pixabay.com/audio/2022/03/10/audio_8cfc5e8b41.mp3',
-  fireplace: 'https://cdn.pixabay.com/audio/2021/10/25/audio_5b89e5b2b5.mp3',
-  ocean: 'https://cdn.pixabay.com/audio/2022/03/15/audio_72a8d5fd4d.mp3'
-};
-
-let audioEl = null;
-
-function stopMusic() {
-  if (audioEl) { audioEl.pause(); audioEl = null; }
-  musicPlaying = false;
-  updateMusicBtn(false);
-}
-
-function playTrack(track, btn) {
-  document.querySelectorAll('.music-track').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-  stopMusic();
-  document.getElementById('music-panel').classList.remove('open');
-  if (track === 'none') return;
-  audioEl = new Audio(TRACKS[track]);
-  audioEl.loop = true;
-  audioEl.volume = 0.3;
-  audioEl.play();
-  musicPlaying = true;
-  updateMusicBtn(true);
-}
+<div class="music-panel" id="music-panel">
+  <div class="music-panel-title">Musique d'ambiance</div>
+  <div class="music-track active" onclick="playTrack('piano', this)">
+    <span class="track-icon">🎹</span>
+    <span class="track-name">Piano nocturne</span>
+  </div>
+  <div class="music-track" onclick="playTrack('rain', this)">
+    <span class="track-icon">🌧️</span>
+    <span class="track-name">Pluie d'été</span>
+  </div>
+  <div class="music-track" onclick="playTrack('fireplace', this)">
+    <span class="track-icon">🔥</span>
+    <span class="track-name">Feu de cheminée</span>
+  </div>
+  <div class="music-track" onclick="playTrack('ocean', this)">
+    <span class="track-icon">🌊</span>
+    <span class="track-name">Vagues douces</span>
+  </div>
+  <div class="music-track" onclick="playTrack('none', this)">
+    <span class="track-icon">🔇</span>
+    <span class="track-name">Silence</span>
+  </div>
+</div>
 
 <!-- CONTENU -->
 <div class="reader-content">
@@ -684,10 +679,15 @@ function changeFontSize(dir) {
 // ═══════════════════════════════════
 // MUSIQUE (Web Audio synthétique)
 // ═══════════════════════════════════
-let audioCtx = null;
-let musicNodes = [];
 let musicPlaying = false;
-let currentTrack = 'piano';
+let audioEl = null;
+
+const TRACKS = {
+  piano: 'https://cdn.pixabay.com/audio/2022/10/31/audio_b2f8d0f2d5.mp3',
+  rain: 'https://cdn.pixabay.com/audio/2022/03/10/audio_8cfc5e8b41.mp3',
+  fireplace: 'https://cdn.pixabay.com/audio/2021/10/25/audio_5b89e5b2b5.mp3',
+  ocean: 'https://cdn.pixabay.com/audio/2022/03/15/audio_72a8d5fd4d.mp3'
+};
 
 function toggleMusicPanel() {
   const panel = document.getElementById('music-panel');
@@ -701,8 +701,7 @@ document.addEventListener('click', (e) => {
 });
 
 function stopMusic() {
-  musicNodes.forEach(n => { try { n.stop(); } catch(e) {} });
-  musicNodes = [];
+  if (audioEl) { audioEl.pause(); audioEl = null; }
   musicPlaying = false;
   updateMusicBtn(false);
 }
@@ -725,113 +724,18 @@ function updateMusicBtn(playing) {
 function playTrack(track, btn) {
   document.querySelectorAll('.music-track').forEach(t => t.classList.remove('active'));
   btn.classList.add('active');
-  currentTrack = track;
   stopMusic();
   document.getElementById('music-panel').classList.remove('open');
   if (track === 'none') return;
-
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-
+  audioEl = new Audio(TRACKS[track]);
+  audioEl.loop = true;
+  audioEl.volume = 0.3;
+  audioEl.play().catch(() => {});
   musicPlaying = true;
   updateMusicBtn(true);
-
-  if (track === 'rain') playRain();
-  else if (track === 'fireplace') playFireplace();
-  else if (track === 'ocean') playOcean();
-  else playPiano();
 }
 
-function playRain() {
-  const bufferSize = audioCtx.sampleRate * 3;
-  const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-  const data = buffer.getChannelData(0);
-  for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * 0.15;
-  const source = audioCtx.createBufferSource();
-  source.buffer = buffer;
-  source.loop = true;
-  const filter = audioCtx.createBiquadFilter();
-  filter.type = 'bandpass';
-  filter.frequency.value = 3000;
-  filter.Q.value = 0.3;
-  const gain = audioCtx.createGain();
-  gain.gain.value = 0.3;
-  source.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
-  source.start();
-  musicNodes = [source];
-}
 
-function playFireplace() {
-  const bufferSize = audioCtx.sampleRate * 2;
-  const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-  const data = buffer.getChannelData(0);
-  for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * 0.08;
-  const source = audioCtx.createBufferSource();
-  source.buffer = buffer;
-  source.loop = true;
-  const filter = audioCtx.createBiquadFilter();
-  filter.type = 'lowpass';
-  filter.frequency.value = 600;
-  const gain = audioCtx.createGain();
-  gain.gain.value = 0.4;
-  source.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
-  source.start();
-  musicNodes = [source];
-}
-
-function playOcean() {
-  const bufferSize = audioCtx.sampleRate * 4;
-  const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-  const data = buffer.getChannelData(0);
-  for (let i = 0; i < bufferSize; i++) {
-    const wave = Math.sin(i / audioCtx.sampleRate * 0.3) * 0.5 + 0.5;
-    data[i] = (Math.random() * 2 - 1) * 0.12 * wave;
-  }
-  const source = audioCtx.createBufferSource();
-  source.buffer = buffer;
-  source.loop = true;
-  const filter = audioCtx.createBiquadFilter();
-  filter.type = 'bandpass';
-  filter.frequency.value = 800;
-  filter.Q.value = 0.5;
-  const gain = audioCtx.createGain();
-  gain.gain.value = 0.35;
-  source.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
-  source.start();
-  musicNodes = [source];
-}
-
-function playPiano() {
-  const notes = [261.63, 293.66, 329.63, 349.23, 392, 440, 493.88, 523.25];
-  const melody = [0, 2, 4, 7, 4, 2, 0, 5, 3, 1, 5, 3];
-  let time = audioCtx.currentTime + 0.5;
-  const allNodes = [];
-
-  function scheduleNote(freq, start, dur) {
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = 'triangle';
-    osc.frequency.value = freq;
-    gain.gain.setValueAtTime(0, start);
-    gain.gain.linearRampToValueAtTime(0.06, start + 0.05);
-    gain.gain.exponentialRampToValueAtTime(0.001, start + dur);
-    osc.connect(gain); gain.connect(audioCtx.destination);
-    osc.start(start); osc.stop(start + dur + 0.1);
-    allNodes.push(osc);
-  }
-
-  function playLoop() {
-    if (!musicPlaying) return;
-    time = audioCtx.currentTime + 0.1;
-    melody.forEach((noteIdx, i) => {
-      scheduleNote(notes[noteIdx] / 2, time + i * 0.6, 1.2);
-      if (i % 3 === 0) scheduleNote(notes[(noteIdx + 4) % 8] / 2, time + i * 0.6 + 0.3, 0.8);
-    });
-    setTimeout(playLoop, melody.length * 600);
-  }
-  playLoop();
-  musicNodes = allNodes;
-}
 
 // ═══════════════════════════════════
 // PROGRESSION DE LECTURE
