@@ -491,9 +491,8 @@
         <h2 class="gen-result-title" id="gen-story-title"></h2>
         <div class="gen-result-body" id="gen-story-body"></div>
         <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
-         <button class="btn-primary" onclick="window._genTitle=document.getElementById('gen-story-title').textContent; window._genBody=document.getElementById('gen-story-body').innerText; saveGenerated()">💾 Sauvegarder</button>
+          <button class="btn-primary" onclick="saveGenerated()">💾 Sauvegarder</button>
           <button class="btn-outline" onclick="generateStory()">↺ Régénérer</button>
-         <button class="btn-outline" onclick="openImmersive()">🌙 Lecture Immersive</button>
         </div>
       </div>
     </div>
@@ -909,8 +908,6 @@ Règles absolues :
     const paras = body.split('\n\n').filter(p=>p.trim()).map(p=>`<p>${p.trim()}</p>`).join('');
     document.getElementById('gen-story-title').textContent = title;
     document.getElementById('gen-story-body').innerHTML = paras || `<p>${body}</p>`;
-    window._genTitle = title;
-    window._genBody = body;
     loading.style.display = 'none';
     output.style.display = 'block';
 
@@ -923,29 +920,11 @@ Règles absolues :
 
   btn.disabled = false;
 }
-function openImmersive() {
-  const title = window._genTitle || document.getElementById('gen-story-title')?.textContent || '';
-  const body = window._genBody || document.getElementById('gen-story-body')?.innerText || '';
-  if (!title || title === 'Oups…') { showToast('Générez d\'abord une histoire !'); return; }
-  const url = '/lecteur-immersif?titre=' + encodeURIComponent(title) + '&contenu=' + encodeURIComponent(body);
-  window.open(url, '_blank');
-}
-async function saveGenerated() {
-  const title = window._genTitle || document.getElementById('gen-story-title')?.textContent;
-  const body = window._genBody || document.getElementById('gen-story-body')?.innerText;
-  if (!title || title === 'Oups…') { showToast('Générez d\'abord une histoire !'); return; }
-  showToast('💾 Sauvegarde en cours…');
-  try {
-    const res = await fetch('/api/stories', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ titre: title, contenu: body, categorie: 'romantique', user_id: currentUser?.email || 'Anonyme' })
-    });
-    const data = await res.json();
-    if (data.error) showToast('❌ ' + data.error);
-    else showToast('✦ Histoire sauvegardée !');
-  } catch(e) { showToast('Erreur de sauvegarde'); }
-}
+
+function saveGenerated() { showToast('Histoire sauvegardée dans vos favoris ♥'); }
+
+// ── AUTH ─────────────────────────────────────────────────────────
+let currentUser = JSON.parse(localStorage.getItem('velours_user') || 'null');
 
 // ── FAQ ────────────────────────────────────────────────────────
 function toggleFaq(el) { el.classList.toggle('open'); }
