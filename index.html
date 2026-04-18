@@ -647,7 +647,21 @@
         <li>Téléchargement PDF</li>
         <li>Accès en avant-première</li>
       </ul>
-      <button class="plan-btn plan-btn-premium" style="margin-bottom: 1rem;" onclick="window.location.href='https://buy.stripe.com/test_14AbJ34MAcesfcX8En9IQ00'">Payer 5€/mois avec Stripe</button>
+      onclick="document.getElementById('paypal-velours').style.display='block';this.style.display='none'"
+     <div id="paypal-velours" style="display:none;margin-top:1rem;">
+<div id="paypal-button-container-P-2RG247955F035343XNHRVDGY"></div>
+<script src="https://www.paypal.com/sdk/js?client-id=AbG9F4ruHBYLNq_Z7X-PRDUfQK9iFvmOMPTiBW8SDFx__lLEnum3nqYLk6y4yq1koIndaGPIak8xxRiv&vault=true&intent=subscription"></script>
+<script>
+paypal.Buttons({
+  style:{shape:'rect',color:'gold',layout:'vertical',label:'subscribe'},
+  createSubscription:function(data,actions){return actions.subscription.create({plan_id:'P-2RG247955F035343XNHRVDGY'});},
+  onApprove:function(data,actions){
+    localStorage.setItem('velours_premium','1');
+    window.location.href='/';
+  }
+}).render('#paypal-button-container-P-2RG247955F035343XNHRVDGY');
+</script>
+</div>
       <p style="text-align: center; font-size: 0.72rem; color: var(--text-soft); font-family: 'Jost', sans-serif;">🔒 Paiement sécurisé · Sans engagement</p>
     </div>
 
