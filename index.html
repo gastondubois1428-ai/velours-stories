@@ -1038,5 +1038,268 @@ if (window.location.search.includes('premium=success')) {
 }
 init();
 </script>
+ <!-- ═══════════════════════════════════════════════════════ -->
+<!-- SECTION ABONNEMENT VELOURS STORIES                      -->
+<!-- À coller AVANT la balise </body> de velours-stories.com -->
+<!-- ═══════════════════════════════════════════════════════ -->
+
+<style>
+  /* Section Abonnement Velours */
+  .velours-subscribe {
+    padding: 6rem 2rem;
+    background: linear-gradient(135deg, #FCF8F0 0%, #F5EDE0 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .velours-subscribe::before,
+  .velours-subscribe::after {
+    content: '✦';
+    position: absolute;
+    color: #B4915A;
+    font-size: 2rem;
+    opacity: 0.3;
+  }
+  .velours-subscribe::before {
+    top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .velours-subscribe::after {
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .velours-subscribe-container {
+    max-width: 560px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .velours-subscribe-label {
+    font-family: Georgia, 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #B4915A;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+
+  .velours-subscribe-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 2.75rem;
+    font-weight: 600;
+    color: #722F37;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  .velours-subscribe-subtitle {
+    font-family: Georgia, serif;
+    font-size: 1.05rem;
+    color: #3A2A2E;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+    font-style: italic;
+  }
+
+  .velours-subscribe-ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin: 1.5rem 0 2rem;
+    color: #B4915A;
+  }
+  .velours-subscribe-ornament::before,
+  .velours-subscribe-ornament::after {
+    content: '';
+    width: 60px;
+    height: 1px;
+    background: #B4915A;
+    opacity: 0.5;
+  }
+  .velours-subscribe-ornament span {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+  }
+
+  .velours-subscribe-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 440px;
+    margin: 0 auto;
+  }
+
+  .velours-subscribe-input {
+    font-family: Georgia, serif;
+    font-size: 1rem;
+    padding: 1.1rem 1.5rem;
+    border: 1px solid rgba(114, 47, 55, 0.2);
+    background: rgba(255, 255, 255, 0.8);
+    color: #3A2A2E;
+    outline: none;
+    transition: all 0.3s ease;
+    text-align: center;
+    letter-spacing: 0.02em;
+  }
+  .velours-subscribe-input:focus {
+    border-color: #722F37;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(114, 47, 55, 0.08);
+  }
+  .velours-subscribe-input::placeholder {
+    color: rgba(58, 42, 46, 0.4);
+    font-style: italic;
+  }
+
+  .velours-subscribe-button {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 1.1rem 2rem;
+    background: #722F37;
+    color: #F5EDE0;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  .velours-subscribe-button:hover {
+    background: #5A1E28;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(114, 47, 55, 0.25);
+  }
+  .velours-subscribe-button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+
+  .velours-subscribe-message {
+    margin-top: 1.5rem;
+    font-family: Georgia, serif;
+    font-size: 0.95rem;
+    font-style: italic;
+    min-height: 1.5rem;
+  }
+  .velours-subscribe-message.success {
+    color: #722F37;
+  }
+  .velours-subscribe-message.error {
+    color: #a64c5b;
+  }
+
+  .velours-subscribe-footer {
+    margin-top: 2rem;
+    font-family: Georgia, serif;
+    font-size: 0.75rem;
+    color: #B4915A;
+    letter-spacing: 0.05em;
+    font-style: italic;
+  }
+
+  /* Mobile */
+  @media (max-width: 640px) {
+    .velours-subscribe {
+      padding: 4rem 1.5rem;
+    }
+    .velours-subscribe-title {
+      font-size: 2.1rem;
+    }
+    .velours-subscribe-subtitle {
+      font-size: 1rem;
+    }
+  }
+</style>
+
+<section class="velours-subscribe" id="subscribe">
+  <div class="velours-subscribe-container">
+    <div class="velours-subscribe-label">· Rejoignez la correspondance ·</div>
+
+    <h2 class="velours-subscribe-title">
+      Une histoire, chaque semaine.<br />
+      Dans votre boîte mail.
+    </h2>
+
+    <div class="velours-subscribe-ornament">
+      <span>✦</span>
+    </div>
+
+    <p class="velours-subscribe-subtitle">
+      Inscrivez-vous et recevez nos nouvelles histoires romantiques et sensuelles —
+      écrites avec soin, pour celles et ceux qui aiment les belles lectures.
+    </p>
+
+    <form class="velours-subscribe-form" id="veloursSubscribeForm" onsubmit="veloursSubscribe(event)">
+      <input
+        type="email"
+        id="veloursEmail"
+        class="velours-subscribe-input"
+        placeholder="votre adresse email"
+        required
+        autocomplete="email"
+      />
+      <button type="submit" class="velours-subscribe-button" id="veloursSubmitBtn">
+        Rejoindre Velours
+      </button>
+    </form>
+
+    <div class="velours-subscribe-message" id="veloursMessage"></div>
+
+    <div class="velours-subscribe-footer">
+      Réservé aux adultes (18+) · Désinscription à tout moment
+    </div>
+  </div>
+</section>
+
+<script>
+  async function veloursSubscribe(event) {
+    event.preventDefault();
+
+    const email = document.getElementById('veloursEmail').value;
+    const messageEl = document.getElementById('veloursMessage');
+    const btn = document.getElementById('veloursSubmitBtn');
+
+    // Reset
+    messageEl.textContent = '';
+    messageEl.className = 'velours-subscribe-message';
+    btn.disabled = true;
+    btn.textContent = 'Un instant…';
+
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        messageEl.textContent = data.alreadySubscribed
+          ? '✦ Vous êtes déjà des nôtres. Bienvenue à nouveau.'
+          : '✦ Bienvenue chez Velours. Un email vous attend.';
+        messageEl.classList.add('success');
+        document.getElementById('veloursEmail').value = '';
+        btn.textContent = '✓ Inscription confirmée';
+      } else {
+        messageEl.textContent = data.error || 'Une erreur est survenue';
+        messageEl.classList.add('error');
+        btn.disabled = false;
+        btn.textContent = 'Rejoindre Velours';
+      }
+    } catch (error) {
+      messageEl.textContent = 'Erreur de connexion, veuillez réessayer';
+      messageEl.classList.add('error');
+      btn.disabled = false;
+      btn.textContent = 'Rejoindre Velours';
+    }
+  }
+</script>
+
 </body>
 </html>
